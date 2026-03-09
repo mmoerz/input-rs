@@ -24,6 +24,8 @@
 
 This fork pushes the leptos version to 0.8.2, which is necessary for one of my own projets.
 
+And i included textarea now, since it was commented out and i have no clue why.
+
 ## 📜 License
 
 Input RS is licensed under the [Apache License](LICENSE). You are free to use, modify, and distribute this library in your projects.

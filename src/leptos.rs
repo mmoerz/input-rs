@@ -234,6 +234,10 @@ pub fn Input(
     #[prop(default = "")]
     autocomplete: &'static str,
 
+    /// Controls automatic correction behavior in some browsers.
+    #[prop(default = "")]
+    autocorrect: &'static str,
+
     /// Media capture input method in file upload controls.
     #[prop(default = "")]
     capture: &'static str,
@@ -329,11 +333,21 @@ pub fn Input(
     /// Same as the `width` attribute for `<img>` elements.
     #[prop(default = None)]
     width: Option<u32>,
+
+    /// the rows for textarea
+    #[prop(default = None)]
+    rows: Option<u32>,
+
+    /// the cols for textarea
+    #[prop(default = None)]
+    cols: Option<u32>,
+
 ) -> impl IntoView {
     let (eye_active_handle, set_eye_active_handle) = signal(false);
     let (password_type, set_password_type) = signal("password".to_string());
     let valid = valid_handle;
     let input_ref: NodeRef<html::Input> = NodeRef::new();
+    let textarea_ref: NodeRef<html::Textarea> = NodeRef::new();
 
     let onchange = {
         move |ev: web_sys::Event| {
@@ -393,23 +407,30 @@ pub fn Input(
                     />
                 </>
             }.into_any()),
-            // "textarea" => Some(view! {
-            //     <>
-            //         <textarea
-            //             class={input_class}
-            //             id={id}
-            //             name={name}
-            //             placeholder={placeholder}
-            //             aria-label={aria_label}
-            //             aria-required={aria_required}
-            //             aria-invalid={aria_invalid}
-            //             aria-describedby={aria_describedby}
-            //             on:input={onchange}
-            //             required={required}
-            //             node_ref={input_ref}
-            //         />
-            //     </>
-            // }.into_any()),
+            "textarea" => Some(view! {
+                <>
+                    <textarea
+                        class={input_class}
+                        id={id}
+                        name={name}
+                        placeholder={placeholder}
+                        aria-label={aria_label}
+                        aria-required={aria_required}
+                        aria-invalid={aria_invalid}
+                        aria-describedby={aria_describedby}
+                        on:input={onchange}
+                        required={required}
+                        node_ref={textarea_ref}
+                        autocomplete={autocomplete}
+                        autocapitalize={autocapitalize}
+                        readonly={readonly}
+                        cols={cols.map(|v| v.to_string())}
+                        rows={rows.map(|v| v.to_string())}
+                        minlength={minlength.map(|v| v.to_string())}
+                        maxlength={maxlength.map(|v| v.to_string())}
+                    />
+                </>
+            }.into_any()),
             "tel" => Some(view! {
                 <>
                     <select class={field_class} on:change={onchange}>
